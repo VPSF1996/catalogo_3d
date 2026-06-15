@@ -150,6 +150,28 @@ def coletar_metadados(caminhos_stl):
 
     nome_vendedor = perguntar("Seu nome (exibido na saudação do WhatsApp, ex.: Victor)", "")
 
+    print("\n── Preço por unidade ─────────────────────────────────────────────────")
+    faixas_preco = []
+    preco_base_str = perguntar("Preço unitário em R$ (Enter para pular)", "")
+    if preco_base_str:
+        try:
+            preco_base = float(preco_base_str.replace(',', '.'))
+            faixas_preco.append({"minQtd": 1, "preco": preco_base})
+            print("   Desconto por volume (Enter para encerrar):")
+            print("   Formato: quantidade mínima:preço  (ex.: 20:36)")
+            while True:
+                entrada = input("   Faixa: ").strip()
+                if not entrada:
+                    break
+                try:
+                    partes = entrada.split(':')
+                    faixas_preco.append({"minQtd": int(partes[0].strip()), "preco": float(partes[1].strip().replace(',', '.'))})
+                    print(f"  ✔  A partir de {partes[0].strip()} unid.: R$ {partes[1].strip()}")
+                except (ValueError, IndexError):
+                    print("  ⚠  Formato inválido. Use: 20:36")
+        except ValueError:
+            print("  ⚠  Preço inválido, campo ignorado.")
+
     print("\n── Número de WhatsApp (para receber pedidos) ─────────────────────────")
     print("   Formato: código do país + DDD + número (ex.: 5555991224041)")
     numero_padrao = "5555991224041"
@@ -167,6 +189,7 @@ def coletar_metadados(caminhos_stl):
         "descricao":    descricao,
         "numero":       numero,
         "nomeVendedor": nome_vendedor,
+        "faixasPreco":  faixas_preco,
     }
 
 # ── Configuração de peças ──────────────────────────────────────────────────────
@@ -365,10 +388,12 @@ def montar_config_js(meta, pecas, opcoes):
     rz   = opcoes.get("rotacaoZ", 0)
     zoom = opcoes.get("zoom", 1.5)
 
+    faixas_js = json.dumps(meta.get("faixasPreco", []), ensure_ascii=False)
     config = f"""const CONFIG = {{
   produto: {{ nome: {json.dumps(meta["nome"])}, preco: {preco_val}, descricao: {json.dumps(meta["descricao"])} }},
   whatsappNumber: {json.dumps(meta["numero"])},
   nomeVendedor: {json.dumps(meta.get("nomeVendedor", ""))},
+  faixasPreco: {faixas_js},
   marca: {{ corPrimaria: {json.dumps(opcoes["cor_primaria"])}, fundo: {json.dumps(opcoes["fundo"])} }},
   modelo: {{ autoRotacao: {str(opcoes["auto_rot"]).lower()}, rotacaoX: {rx}, rotacaoY: {ry}, rotacaoZ: {rz}, zoom: {zoom} }},
   pecas: [
