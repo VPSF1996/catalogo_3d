@@ -327,7 +327,7 @@ def configurar_pecas(caminhos_stl):
 # ── Opções extras ──────────────────────────────────────────────────────────────
 def coletar_opcoes():
     print("── Opções extras ────────────────────────────────────────────────────")
-    cor_livre_str = perguntar("Permitir cor personalizada (além da paleta)? [s/n]", "s")
+    cor_livre_str = perguntar("Permitir cor personalizada (além da paleta)? [s/n]", "n")
     cor_livre = cor_livre_str.lower() not in ("n", "nao", "não")
 
     embutido_str = perguntar("Embutir STLs em base64 (arquivo único, sem servidor)? [s/n]", "s")
