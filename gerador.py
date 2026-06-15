@@ -35,6 +35,26 @@ PALETAS_PADRAO = {
         {"nome":"Branco",   "hex":"#f5f5f5"},
         {"nome":"Creme",    "hex":"#fef9c3"},
     ],
+    "4 – Filamentos Bambu Lab": [
+        {"nome":"Amarelo Girassol",  "hex":"#FEC600"},
+        {"nome":"Azul Ciano",        "hex":"#0086D6"},
+        {"nome":"Azul Escuro Matte", "hex":"#395064"},
+        {"nome":"Rosa Sakura Matte", "hex":"#E8AFCF"},
+        {"nome":"Branco Matte",      "hex":"#F2EDE4"},
+        {"nome":"Vermelho",          "hex":"#C12E1F"},
+        {"nome":"Bege",              "hex":"#F7E6DE"},
+        {"nome":"Laranja",           "hex":"#FF6A13"},
+        {"nome":"Candy Cloud",       "hex":"#D4B8E0"},
+        {"nome":"Roxo Iris",         "hex":"#69398E"},
+        {"nome":"Preto Matte",       "hex":"#1A1A1A"},
+        {"nome":"Preto",             "hex":"#111111"},
+        {"nome":"Verde Matcha",      "hex":"#5C9748"},
+        {"nome":"Verde Bandeira",    "hex":"#009C3B"},
+        {"nome":"Verm. Borgonha",    "hex":"#951E23"},
+        {"nome":"Verde Luminous",    "hex":"#C8E86B"},
+        {"nome":"Azul Luminous",     "hex":"#7EC8E3"},
+        {"nome":"Cinza",             "hex":"#8E9089"},
+    ],
 }
 
 # ── Helpers ────────────────────────────────────────────────────────────────────
