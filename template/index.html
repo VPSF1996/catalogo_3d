@@ -243,9 +243,16 @@
   #qtd-valor {
     font-size: 22px;
     font-weight: 700;
-    min-width: 28px;
+    width: 56px;
     text-align: center;
+    border: none;
+    background: transparent;
+    color: var(--texto);
+    outline: none;
+    -moz-appearance: textfield;
   }
+  #qtd-valor::-webkit-outer-spin-button,
+  #qtd-valor::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 
   /* ── Preço ───────────────────────────────────────────────────────── */
   #preco-wrap { display: flex; flex-direction: column; gap: 2px; margin-top: 4px; }
@@ -461,7 +468,7 @@ const CONFIG = {
       <div class="secao-titulo">Quantidade</div>
       <div id="quantidade-wrap">
         <button class="btn-qtd" id="btn-menos">−</button>
-        <span id="qtd-valor">1</span>
+        <input type="number" id="qtd-valor" value="1" min="1" inputmode="numeric">
         <button class="btn-qtd" id="btn-mais">+</button>
       </div>
       <div id="preco-wrap" style="display:none">
@@ -619,12 +626,16 @@ function atualizarPreco() {
 // ── Quantidade ────────────────────────────────────────────────────────────────
 const qtdEl = document.getElementById('qtd-valor');
 
-document.getElementById('btn-menos').addEventListener('click', () => {
-  if (quantidade > 1) { quantidade--; qtdEl.textContent = quantidade; atualizarPreco(); }
-});
-document.getElementById('btn-mais').addEventListener('click', () => {
-  quantidade++; qtdEl.textContent = quantidade; atualizarPreco();
-});
+function definirQuantidade(v) {
+  quantidade = Math.max(1, Math.floor(v) || 1);
+  qtdEl.value = quantidade;
+  atualizarPreco();
+}
+
+document.getElementById('btn-menos').addEventListener('click', () => definirQuantidade(quantidade - 1));
+document.getElementById('btn-mais').addEventListener('click', () => definirQuantidade(quantidade + 1));
+qtdEl.addEventListener('input', () => definirQuantidade(Number(qtdEl.value)));
+qtdEl.addEventListener('blur',  () => { qtdEl.value = quantidade; });
 
 atualizarPreco();
 
