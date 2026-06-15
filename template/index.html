@@ -240,6 +240,33 @@
     text-align: center;
   }
 
+  #quantidade-wrap {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .btn-qtd {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    border: 1.5px solid var(--borda);
+    background: var(--superficie);
+    color: var(--texto);
+    font-size: 22px;
+    line-height: 1;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: border-color .15s;
+    user-select: none; -webkit-user-select: none;
+  }
+  .btn-qtd:hover  { border-color: var(--cor-primaria); }
+  .btn-qtd:active { transform: scale(.92); }
+  #qtd-valor {
+    font-size: 22px;
+    font-weight: 700;
+    min-width: 28px;
+    text-align: center;
+  }
+
   @media (min-width: 640px) {
     #app { flex-direction: row; height: 100vh; }
     #viewer-wrap { flex: 1 1 0; height: 100%; }
@@ -313,6 +340,15 @@ const CONFIG = {
       <div class="secao-titulo">Resumo da personalização</div>
       <div id="resumo"></div>
     </div>
+
+    <div class="secao">
+      <div class="secao-titulo">Quantidade</div>
+      <div id="quantidade-wrap">
+        <button class="btn-qtd" id="btn-menos">−</button>
+        <span id="qtd-valor">1</span>
+        <button class="btn-qtd" id="btn-mais">+</button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -384,6 +420,15 @@ try {
 } catch (_) {}
 
 let pecaSelecionada = CONFIG.pecas[0]?.id ?? null;
+let quantidade = 1;
+
+document.getElementById('btn-menos').addEventListener('click', () => {
+  if (quantidade > 1) { quantidade--; document.getElementById('qtd-valor').textContent = quantidade; }
+});
+document.getElementById('btn-mais').addEventListener('click', () => {
+  quantidade++;
+  document.getElementById('qtd-valor').textContent = quantidade;
+});
 
 // ── Three.js ──────────────────────────────────────────────────────────────────
 const canvas = document.getElementById('canvas3d');
@@ -698,19 +743,20 @@ document.getElementById('btn-whatsapp').addEventListener('click', () => {
     return;
   }
   const agora = new Date();
-  const data  = agora.toLocaleDateString('pt-BR', { year:'numeric', month:'2-digit', day:'2-digit' })
-                     .split('/').reverse().join('-');
-  const hora  = agora.toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' });
+  const data = agora.toLocaleDateString('pt-BR', { year:'numeric', month:'2-digit', day:'2-digit' })
+                    .split('/').reverse().join('-');
+  const hora = agora.toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' }).replace(':', 'h');
 
+  const saudacao = CONFIG.nomeVendedor ? `Olá, ${CONFIG.nomeVendedor}! ` : 'Olá! ';
   const linhas = CONFIG.pecas.map(p => {
     const hex   = cores[p.id];
-    const peca  = CONFIG.pecas.find(pp => pp.id === p.id);
-    const match = peca?.paleta.find(c => c.hex.toLowerCase() === hex.toLowerCase());
-    const nome  = match ? match.nome : 'Personalizada';
+    const match = p.paleta.find(c => c.hex.toLowerCase() === hex.toLowerCase());
+    const nome  = match ? match.nome : `Personalizada ${hex.toUpperCase()}`;
     return `• ${p.rotulo}: ${nome} (${hex.toUpperCase()})`;
   }).join('\n');
+  const unidade = quantidade === 1 ? 'unidade' : 'unidades';
 
-  const msg = `Olá! Quero personalizar o produto: ${CONFIG.produto.nome}\n${linhas}\nPedido: ${data} ${hora}`;
+  const msg = `${saudacao}Quero personalizar o produto: ${CONFIG.produto.nome}\n${linhas}\nPedido: ${data} ${hora}\n\nPreciso de ${quantidade} ${unidade}. Poderia fazer um orçamento do frete por gentileza?`;
   window.open(`https://wa.me/${CONFIG.whatsappNumber}?text=${encodeURIComponent(msg)}`, '_blank');
 });
 

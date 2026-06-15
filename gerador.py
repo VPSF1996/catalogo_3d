@@ -148,6 +148,8 @@ def coletar_metadados(caminhos_stl):
         "Personalize as cores e finalize pelo WhatsApp."
     )
 
+    nome_vendedor = perguntar("Seu nome (exibido na saudação do WhatsApp, ex.: Victor)", "")
+
     print("\n── Número de WhatsApp (para receber pedidos) ─────────────────────────")
     print("   Formato: código do país + DDD + número (ex.: 5555991224041)")
     numero_padrao = "5555991224041"
@@ -159,11 +161,12 @@ def coletar_metadados(caminhos_stl):
         print(f"  ⚠  {erro}")
 
     return {
-        "nome":     nome,
-        "slug":     slug,
-        "preco":    preco,
-        "descricao":descricao,
-        "numero":   numero,
+        "nome":         nome,
+        "slug":         slug,
+        "preco":        preco,
+        "descricao":    descricao,
+        "numero":       numero,
+        "nomeVendedor": nome_vendedor,
     }
 
 # ── Configuração de peças ──────────────────────────────────────────────────────
@@ -365,6 +368,7 @@ def montar_config_js(meta, pecas, opcoes):
     config = f"""const CONFIG = {{
   produto: {{ nome: {json.dumps(meta["nome"])}, preco: {preco_val}, descricao: {json.dumps(meta["descricao"])} }},
   whatsappNumber: {json.dumps(meta["numero"])},
+  nomeVendedor: {json.dumps(meta.get("nomeVendedor", ""))},
   marca: {{ corPrimaria: {json.dumps(opcoes["cor_primaria"])}, fundo: {json.dumps(opcoes["fundo"])} }},
   modelo: {{ autoRotacao: {str(opcoes["auto_rot"]).lower()}, rotacaoX: {rx}, rotacaoY: {ry}, rotacaoZ: {rz}, zoom: {zoom} }},
   pecas: [
