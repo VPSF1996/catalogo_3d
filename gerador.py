@@ -174,7 +174,7 @@ def coletar_metadados(caminhos_stl):
 
     print("\n── Número de WhatsApp (para receber pedidos) ─────────────────────────")
     print("   Formato: código do país + DDD + número (ex.: 5555991224041)")
-    numero_padrao = "5555991349643"
+    numero_padrao = "55991349643"
     while True:
         numero_raw = perguntar("Número", numero_padrao)
         numero, erro = validar_numero_whatsapp(numero_raw)
