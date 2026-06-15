@@ -14,9 +14,8 @@ venv/
 .Spotlight-V8
 .Trashes
 
-# STLs (embutidos no HTML — não commitar os arquivos brutos)
+# STLs de teste (não publicar)
 stls_teste/
-catalogo/**/*.stl
 
 # Logs
 *.log
